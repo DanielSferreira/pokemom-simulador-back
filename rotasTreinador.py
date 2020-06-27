@@ -8,17 +8,15 @@ rotas_treinador = Blueprint('urls', __name__)
 @rotas_treinador.route('/treinador/novo', methods = ['POST'])
 def newTreinador():
     try:
-        user_data = request.get_json() # 
-        print(user_data)
+        user_data = request.get_json() #
     except Exception as e:
-        response = 'erro ao resgatar'
-        print(response)
+        response = {'status':'error em salvar','message': e}
     try:
         res = execute('treinador', treinador(user_data['nome_treinador'],user_data['regiao'],user_data['id_de_treinador']))
-        response = "Sucesso"
+        response = {'status':'ok'}
     except Exception:
         print('erro ao salvar')
-        response = 'erro ao salvar'
+        response = {'status':'erro em NewTreinado'}
     return jsonify({'status':response})
 
 @rotas_treinador.route('/treinadores/all')

@@ -6,6 +6,7 @@ from src.crud import execute, getAllByNameTable, getPokemomByColumnName, getTrei
 import requests
 
 rotas_pokemoms = Blueprint('urls2', __name__)
+response = []
 
 @rotas_pokemoms.route('/pokemom/getPokemomId/<int:idPoke>/')
 def getPokemomId(idPoke):
@@ -15,33 +16,36 @@ def getPokemomId(idPoke):
 
 @rotas_pokemoms.route('/pokemom/listPokemom/')
 def listPokemom():
-    res = []
     try:
         getData = getAllByNameTable('pokeList')
         for i in getData:
-            res.append({
+            response.append({
                 'id_pokedex': i.id_pokedex,
                 'pokemom_nome': i.pokemom_nome
             })
     except Exception as e:
-        res = ['Erro na busca']
-    return jsonify(res)
+        response = ['Erro na busca']
+    return jsonify(response)
 
 @rotas_pokemoms.route('/pokemom/getBy/<column>/<value>')
 def getByColumnValue(column,value):
     
     try:
         res = getPokemomByColumnName(column,value)
-        print(res) 
+        response = {
+            'id_pokedex': res.id_pokedex,
+            'pokemom_nome': res.pokemom_nome
+        }
+
     except Exception as e:
-        res = ['Erro na busca']
-    return jsonify({'id_pokedex': res.id_pokedex, "pokemom_nome": res.pokemom_nome})
+        response = [{'id_pokedex': 'error', "pokemom_nome": 'error'}]
+        
+    return jsonify(response)
     
 
 def getTreinadoresValores(column,value):
-    res = getTreinadorByColumnName(column,value)
     try:
-        response = res
+        response = getTreinadorByColumnName(column,value)
     except AttributeError as error:
         response = ["Não houve retorno da coluna {} com o valor: {}".format(column,value)]
         
@@ -49,9 +53,9 @@ def getTreinadoresValores(column,value):
 
 @rotas_pokemoms.route('/pokemom/setPokemomForTrainer/', methods = ['POST'])
 def setPokemomForTrainer():
-    user_data = request.get_json() # 
-    print(user_data)
+    
     try:
+        user_data = request.get_json()
         
         idPokedex = user_data['id_pokedex']
         pokemomNome = user_data['pokemom_nome']
@@ -59,12 +63,12 @@ def setPokemomForTrainer():
         nivelPokemom = user_data['nivel_pokemom']
         
         try:
-            res = execute('pokemom', pokemom(idPokedex, pokemomNome, idTrainer, nivelPokemom))
+            response = execute('pokemom', pokemom(idPokedex, pokemomNome, idTrainer, nivelPokemom))
         
         except Exception:
-            return ['Erro ao salvar no banco de dados']
+            response =  {'status':'error em salvar'}
         
     except Exception as e:
-       res = [{'Erro':str(e)}]
+       response = [{'Erro':str(e)}]
             
-    return jsonify(res)
+    return jsonify(response)

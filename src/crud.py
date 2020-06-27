@@ -10,7 +10,6 @@ def execute(tbl,obj):
     except exc.SQLAlchemyError as e:
         return e
     else:
-        print("Olá")
         return {'status':'ok'}
 
 def getAllByNameTable(tbl):
@@ -23,23 +22,17 @@ def getAllByNameTable(tbl):
         return res
 
 def getTreinadorByColumnName(index,valor):
-    print('aqui 0')
     tbl = getTabela('treinador')
     try:
         if index == 'nome_treinador': 
             res = db.session.query(tbl).filter(tbl.nome_treinador == valor).first()
-            print('aqui 1')
         elif index == 'regiao': 
-            print('aqui 2')
             res = db.session.query(tbl).filter(tbl.regiao == valor).first()
-        elif index == 'id_de_treinador': 
-            print('aqui 3')
+        elif index == 'id_de_treinador':
             res = db.session.query(tbl).filter(tbl.id_de_treinador == valor).first()
     except exc.SQLAlchemyError as e:
-        print('aqui 4')
         return e
     else:
-        print('aqui 5')
         return res
 
 def getPokemomByColumnName(index,valor):
