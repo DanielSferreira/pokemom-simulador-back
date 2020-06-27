@@ -46,7 +46,7 @@ def getPokemonsByTreinador(nome):
     try:
         print(treinador.id_de_treinador)
     except Exception:
-        data = ["Treinador não achadado HAHA"]
+        data = ["Erro","Treinador não achadado HAHA"]
     else:
         try:    
             res = getPokemomsByColumnName('id_treinador',treinador.id_de_treinador)
@@ -54,5 +54,5 @@ def getPokemonsByTreinador(nome):
             data = ["Treinador não possui Pokemom"]
         else:
             for linha in res:
-                data.append(linha.pokemom_nome)
+                data.append({"id_pokedex":linha.id_pokedex, "pokemom_nome":linha.pokemom_nome})
     return jsonify(data)

@@ -32,9 +32,11 @@ def getByColumnValue(column,value):
     
     try:
         res = getPokemomByColumnName(column,value)
+        print(res) 
     except Exception as e:
         res = ['Erro na busca']
-    return jsonify(res)
+    return jsonify({'id_pokedex': res.id_pokedex, "pokemom_nome": res.pokemom_nome})
+    
 
 def getTreinadoresValores(column,value):
     res = getTreinadorByColumnName(column,value)
