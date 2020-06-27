@@ -16,30 +16,29 @@ def getPokemomId(idPoke):
 
 @rotas_pokemoms.route('/pokemom/listPokemom/')
 def listPokemom():
+    res = []
     try:
         getData = getAllByNameTable('pokeList')
         for i in getData:
-            response.append({
+            res.append({
                 'id_pokedex': i.id_pokedex,
                 'pokemom_nome': i.pokemom_nome
             })
     except Exception as e:
-        response = ['Erro na busca']
-    return jsonify(response)
+        res = ['Erro na busca']
+
+    return jsonify(res)
 
 @rotas_pokemoms.route('/pokemom/getBy/<column>/<value>')
 def getByColumnValue(column,value):
     
     try:
         res = getPokemomByColumnName(column,value)
-        response = {
-            'id_pokedex': res.id_pokedex,
-            'pokemom_nome': res.pokemom_nome
-        }
+        response = {'id_pokedex': res.id_pokedex, 'pokemom_nome': res.pokemom_nome }
 
     except Exception as e:
         response = [{'id_pokedex': 'error', "pokemom_nome": 'error'}]
-        
+
     return jsonify(response)
     
 
